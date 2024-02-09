@@ -22,17 +22,17 @@ the console.
 -- Modeling/Algorithm
 
 Get a list of individual sentence
-- Split the string with a delimiter
-  - Use a regex pattern that contains a character class containing a period and
-    exclamation mark
-  - Use the above pattern as the delimiter
+- Find matches in the text that match the given pattern
+  - Use a regex pattern that contains a character class that ignores one or more
+    of any character that isn't a exclamation mark or period, followed by a
+    character class that has one or more of either a period or exclamation mark 
 
 Find the longest sentence value
 - Set `max` to 0
-- Transform the list of sentences into a collection of words
+- Transform the sentences into a collection of words
   - First remove the whitespace at the beginning and end of each sentence
   - To get the collection of words, split the sentence at each word
-    - Need to split at the space
+    - Need to split at whitespace
   - Transform the each list of words to the list length
 - Iterate through the list of lengths
   - If the current value is greater than `max`, reassign `max` to that value
@@ -42,7 +42,7 @@ Log the longest sentence and the length of the sentence to the console
 */
 
 function getSentences(text) {
-  let sentences = text.match(/[^\.!\?]+[\.!\?]+/g);
+  let sentences = text.match(/[^\.!]+[\.!]+/g);
   return sentences;
 }
 
