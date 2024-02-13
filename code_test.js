@@ -1,5 +1,3 @@
-let text = '\"this is a double quoted string\"';
+let str = 'asdf _ awev _ azzvb _';
 
-if (text.match(/".*?"/) || text.match(/'.*?'/)) {
-  console.log("Got a quoted string")
-}
+console.log(str.match(/[A-Z]+/gi));
