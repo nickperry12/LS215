@@ -66,14 +66,52 @@ Iterate through array of subarrs
 If the length of the given array is less than 2
 - Return 0
 
+Take the given array and transform all the elements into numbers
+Declare and initialize `triplets` to an empty array
+
+Iterate through the indices of the array, starting at index 0
+- Declare and initialze `endIdx` to the index 3 positions ahead of the current
+  index
+- Create a slice starting at the current index up to `endIdx`
+  - Push this slice into `triplets`
+- Repeat until the current index is greater than the array length minus three
+
+Select subarrays from `triplets` based on the following conditions
+- The element at the zero index of the subarray must be the same element at the
+  last index, and the element at the zero index must differ from the element at
+  the first index
+- Return the length of the array of selected subarrays
 */
+function getTriplets(array) {
+  let triplets = [];
 
+  for (let i = 0; i <= array.length - 3; i += 1) {
+    let endIdx = i + 3;
+    let subarr = array.slice(i, endIdx);
+    triplets.push(subarr);
+  }
 
-countBoomerangs([9, 5, 9, 5, 1, 1, 1])   // 2
-countBoomerangs([9, '5', 9, '5', '1', 1, 1])   // 2
-countBoomerangs([9, -2, 9, -9, 9, 10, 10, 2])   // 2
-countBoomerangs([9, 2])   // 0
-countBoomerangs([])   // 0
-countBoomerangs([1, 7, 1, 7, 1, 7, 1])   // 5
-countBoomerangs()   // undefined
-countBoomerangs([1, 10, 1, 7, 3, 7, 4, 4, 0, 1, 0])   // 3
+  return triplets;
+}
+
+function countBoomerangs(array) {
+  if (!array) return undefined;
+  if (array.length < 3) return 0;
+
+  array = array.map(num => parseInt(num));
+  let triplets = getTriplets(array);
+  let boomerangs = triplets.filter(triplet => {
+    return (triplet[0] === triplet[2] && triplet[0] !== triplet[1]); 
+  });
+
+  return boomerangs.length;
+}
+
+console.log(countBoomerangs([9, 5, 9, 5, 1, 1, 1]));   // 2
+console.log(countBoomerangs([9, '5', 9, '5', '1', 1, 1]));   // 2
+console.log(countBoomerangs([9, -2, 9, -9, 9, 10, 10, 2]));   // 2
+console.log(countBoomerangs([9, 2]));   // 0
+console.log(countBoomerangs([]));   // 0
+console.log(countBoomerangs([1, 7, 1, 7, 1, 7, 1]));   // 5
+console.log(countBoomerangs());   // undefined
+console.log(countBoomerangs([1, 10, 1, 7, 3, 7, 4, 4, 0, 1, 0]));   // 3
