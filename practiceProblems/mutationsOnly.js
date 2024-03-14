@@ -63,31 +63,123 @@ Take the given array and sort it in place
 
 Return the sorted array
 
+-- Alternate Solution
+
+-- Modelling:
+
+I: [1, 2, 0, 0, 4, 0, 5]
+O: [1, 2, 4, 5, 0, 0, 0]
+
+We want to try and solve this without using `sort()`.
+
+We can iterate over the array and filter out all the `0`s and store them into
+a separate array, while simultaneously removing them.
+- Find the zero, add it to a separate array, and then remove it from the given
+  array
+- But, the problem arises while mutating the array is we're iterating over.
+  - We shorten the array length each time we move a zero, so the indexing of
+    elements gets shifted around, messing up our iteration
+    - We need to start iteration from the back of the array, so we're shortening
+      from the back instead of the front
+
+Start at last idx => idx 6
+[1, 2, 0, 0, 4, 0, 5] => check 5 => not zero => [1, 2, 0, 0, 4, 0, 5]
+
+idx 5
+[1, 2, 0, 0, 4, 0, 5] => check 0 => is zero => [1, 2, 0, 0, 4, 5]
+
+idx 4
+[1, 2, 0, 0, 4, 5] => check 4 => not zero => [1, 2, 0, 0, 4, 5]
+
+idx 3
+[1, 2, 0, 0, 4, 5] => check 0 => is zero => [1, 2, 0, 4, 5]
+
+idx 2
+[1, 2, 0, 4, 5] => check 0 => is zero => [1, 2, 4, 5]
+
+No more zeroes
+
+[1, 2, 0, 0, 4, 0, 5, 0]
+
+starting at idx 7
+[1, 2, 0, 0, 4, 0, 5, 0] => check 0 => is 0 => [1, 2, 0, 0, 4, 0, 5]
+
+start at idx 6
+[1, 2, 0, 0, 4, 0, 0] => not a 0 => [1, 2, 0, 0, 4, 0]
+
+start at idx 5
+
+
+
+
+-- Algorithm:
+
+If the array is `null` or no argument is provided
+- Return "Invalid input."
+
+If the length of the array is 0
+- Return an empty array
+
+Convert all string in the given array to numbers
+
+Initialize `zeroes` to an empty list
+
+Iterate through the given array, starting at the last index
+- Check to see if the current element is a `0`
+  - If it is, remove it from the array, and add it to `zeroes`
+
+Return the modified array concatenated with `zeroes`
 */
-let array = [1, 2, 0, 0, 3, 4]; 
+let array = [1, 2, 0, 0, 3, 4];
 
-function zeroesToEnd(array) {
-  if (!array) return "Invalid input."
-  if (array.length === 0) return [];
-
-  array.forEach((item, index) => {
-    if (typeof(item) === 'string') array[index] = parseInt(item);
-  })
-
-  array.sort((a, b) => {
-    if (b === 0) return -1;
-    return 0;
+function convertToNums(array) {
+  array.forEach((num, idx) => {
+    if (typeof(num) === 'string') array[idx] = parseInt(num);
   })
 
   return array;
 }
 
+function zeroesToEnd(array) {
+  if (!array) return "Invalid input.";
+  if (array.length === 0) return [];
+  convertToNums(array);
+
+  let zeroes = [];
+
+  for (let i = array.length - 1; i >= 0; i -= 1) {
+    let num = array[i];
+    if (num === 0) {
+      zeroes.push(num);
+      array.splice(i, 1);
+    }
+  }
+
+  return array.concat(zeroes);
+}
+
+// function zeroesToEnd(array) {
+//   if (!array) return "Invalid input."
+//   if (array.length === 0) return [];
+
+//   array.forEach((item, index) => {
+//     if (typeof(item) === 'string') array[index] = parseInt(item);
+//   })
+
+//   array.sort((a, b) => {
+//     if (b === 0) return -1;
+//     return 0;
+//   })
+
+//   return array;
+// }
+
 console.log(zeroesToEnd([1, 2, 0, 0, 4, 0, 5])); // [1, 2, 4, 5, 0, 0, 0]
-// console.log(zeroesToEnd([0, 0, 2, 0, 5])); // [2, 5, 0, 0, 0]
-// console.log(zeroesToEnd([4, 4, 5])); // [4, 4, 5]
-// console.log(zeroesToEnd([0, 0])); // [0, 0]
-// console.log(zeroesToEnd([])); // []
-// console.log(zeroesToEnd(null)); // "Invalid input."
-// console.log(zeroesToEnd(["1", "2", 0, "0", 4, 5, "0"])); // [1, 2, 4, 5, 0, 0, 0]
-// console.log(zeroesToEnd(array)); // [1, 2, 3, 4, 0, 0]
-// console.log(array); // [1, 2, 3, 4, 0, 0]
+console.log(zeroesToEnd([0, 0, 2, 0, 5])); // [2, 5, 0, 0, 0]
+console.log(zeroesToEnd([4, 4, 5])); // [4, 4, 5]
+console.log(zeroesToEnd([0, 0])); // [0, 0]
+console.log(zeroesToEnd([])); // []
+console.log(zeroesToEnd(null)); // "Invalid input."
+console.log(zeroesToEnd(["1", "2", 0, "0", 4, 5, "0"])); // [1, 2, 4, 5, 0, 0, 0]
+console.log(zeroesToEnd(array)); // [1, 2, 3, 4, 0, 0]
+console.log(array); // [1, 2, 3, 4, 0, 0]
