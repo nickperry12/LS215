@@ -1,13 +1,4 @@
-function transpose(array) {
-  return array[0].map((col, columnIdx) => {
-    return array.map(row => row[columnIdx]);
-  });
+for (let i = 0; i < 5; i += 1) {
+  if (i === 3) return;
+  console.log('hi');
 }
-
-let cards = [
-  ['green', 1, 'empty', 'squiggle'],
-  ['green', 2, 'empty', 'diamond'],
-  ['green', 3, 'empty', 'oval']
-]
-
-console.log(transpose(cards));
